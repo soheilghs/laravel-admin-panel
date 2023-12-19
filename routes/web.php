@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\PanelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,18 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin-login', [PanelController::class, 'loginPage'])
+    ->name('admin.login_page');
+Route::post('/admin-login', [PanelController::class, 'login'])
+    ->name('admin.login');
+
+Route::prefix('admin')->name('admin.')
+    ->middleware('auth')
+    ->group(function () {
+    Route::get('/dashboard', [PanelController::class, 'dashboard'])
+        ->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

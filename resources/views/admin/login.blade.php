@@ -2,8 +2,16 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('admin.login') }}">
         @csrf
+
+        @if(!empty(session('auth')) && (session('auth') == 'fail'))
+            <div class="p-4 mb-4 text-sm text-red-600 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                 role="alert">
+                <span class="font-medium">Fail!</span>
+                Your credentials are incorrect
+            </div>
+        @endif
 
         <!-- Email Address -->
         <div>
@@ -18,9 +26,9 @@
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+                          type="password"
+                          name="password"
+                          required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
